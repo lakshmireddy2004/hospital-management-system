@@ -1,52 +1,53 @@
-name: Hospital Management System CI
+name: Hospital Management System CI/CD
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        service:
+          - api-gateway
+          - auth-service
+          - patient-service
+          - doctor-service
+          - appointment-service
+          - discovery-server-Eureka
+
     steps:
-      - name: Checkout Repository
+      - name: Checkout Source
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21
+      - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: '21'
           cache: maven
 
-      - name: Build Eureka Server
-        working-directory: backend/discovery-server-Eureka
+      - name: Build Application
+        working-directory: backend/${{ matrix.service }}
         run: mvn clean package -DskipTests
 
-      - name: Build Config Server
-        working-directory: backend/config server
-        run: mvn clean package -DskipTests
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Build Auth Service
-        working-directory: backend/auth-service
-        run: mvn clean package -DskipTests
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Patient Service
-        working-directory: backend/patient-service
-        run: mvn clean package -DskipTests
+      - name: Build Docker Image
+        working-directory: backend/${{ matrix.service }}
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/hospital-${{ matrix.service }}:latest .
 
-      - name: Build Doctor Service
-        working-directory: backend/doctor-service
-        run: mvn clean package -DskipTests
-
-      - name: Build Appointment Service
-        working-directory: backend/appointment-service
-        run: mvn clean package -DskipTests
-
-      - name: Build API Gateway
-        working-directory: backend/api-gateway
-        run: mvn clean package -DskipTests
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/hospital-${{ matrix.service }}:latest
