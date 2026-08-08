@@ -1,0 +1,39 @@
+name: Hospital Management System CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-services:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service:
+          - backend/discovery-server-Eureka
+          - backend/config server
+          - backend/auth-service
+          - backend/patient-service
+          - backend/doctor-service
+          - backend/appointment-service
+          - backend/api-gateway
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Build ${{ matrix.service }}
+        working-directory: ${{ matrix.service }}
+        run: mvn clean package -DskipTests
