@@ -1,0 +1,712 @@
+# Hospital Management System - REST API Documentation
+
+---
+
+# 1. User Service
+
+## Base URL
+```
+/api/users
+```
+
+## Register User
+```
+POST /api/users/register
+```
+
+### Request Body
+```json
+{
+  "name": "Lakshmi",
+  "email": "lakshmi@gmail.com",
+  "password": "Password@123",
+  "phone": "9876543210",
+  "role": "PATIENT"
+}
+```
+
+### Response
+```json
+{
+  "message": "User Registered Successfully"
+}
+```
+
+---
+
+## Login
+```
+POST /api/users/login
+```
+
+### Request Body
+```json
+{
+  "email": "lakshmi@gmail.com",
+  "password": "Password@123"
+}
+```
+
+### Response
+```json
+{
+  "token": "JWT_TOKEN"
+}
+```
+
+---
+
+## Get All Users
+
+```
+GET /api/users
+```
+
+---
+
+## Get User By ID
+
+```
+GET /api/users/{id}
+```
+
+---
+
+## Update User
+
+```
+PUT /api/users/{id}
+```
+
+---
+
+## Delete User
+
+```
+DELETE /api/users/{id}
+```
+
+---
+
+## Change Password
+
+```
+PUT /api/users/change-password
+```
+
+---
+
+## Forgot Password
+
+```
+POST /api/users/forgot-password
+```
+
+---
+
+## Reset Password
+
+```
+POST /api/users/reset-password
+```
+
+---
+
+### User Entity
+
+```text
+id
+name
+email
+password
+phone
+role
+status
+createdAt
+updatedAt
+```
+
+---
+
+# 2. Patient Service
+
+## Base URL
+
+```
+/api/patients
+```
+
+---
+
+## Add Patient
+
+```
+POST /api/patients
+```
+
+### Request Body
+
+```json
+{
+  "name": "Rahul",
+  "age": 25,
+  "gender": "Male",
+  "dob": "2001-02-15",
+  "phone": "9876543210",
+  "email": "rahul@gmail.com",
+  "bloodGroup": "B+",
+  "address": "Hyderabad",
+  "medicalHistory": "Diabetes"
+}
+```
+
+---
+
+## Get All Patients
+
+```
+GET /api/patients
+```
+
+---
+
+## Get Patient By ID
+
+```
+GET /api/patients/{id}
+```
+
+---
+
+## Update Patient
+
+```
+PUT /api/patients/{id}
+```
+
+---
+
+## Delete Patient
+
+```
+DELETE /api/patients/{id}
+```
+
+---
+
+## Search Patient
+
+```
+GET /api/patients/search?name=rahul
+```
+
+---
+
+## Get Patient Appointments
+
+```
+GET /api/patients/{id}/appointments
+```
+
+---
+
+## Get Patient Prescriptions
+
+```
+GET /api/patients/{id}/prescriptions
+```
+
+---
+
+### Patient Entity
+
+```text
+id
+name
+age
+gender
+dob
+phone
+email
+bloodGroup
+address
+medicalHistory
+emergencyContact
+```
+
+---
+
+# 3. Doctor Service
+
+## Base URL
+
+```
+/api/doctors
+```
+
+---
+
+## Add Doctor
+
+```
+POST /api/doctors
+```
+
+### Request Body
+
+```json
+{
+  "name": "Dr. Ramesh",
+  "specialization": "Cardiology",
+  "qualification": "MBBS, MD",
+  "experience": 10,
+  "phone": "9876543210",
+  "email": "doctor@gmail.com",
+  "consultationFee": 800
+}
+```
+
+---
+
+## Get All Doctors
+
+```
+GET /api/doctors
+```
+
+---
+
+## Get Doctor By ID
+
+```
+GET /api/doctors/{id}
+```
+
+---
+
+## Update Doctor
+
+```
+PUT /api/doctors/{id}
+```
+
+---
+
+## Delete Doctor
+
+```
+DELETE /api/doctors/{id}
+```
+
+---
+
+## Search Doctor
+
+```
+GET /api/doctors/search?specialization=Cardiology
+```
+
+---
+
+## Available Doctors
+
+```
+GET /api/doctors/available
+```
+
+---
+
+## Doctor Schedule
+
+```
+GET /api/doctors/{id}/schedule
+```
+
+---
+
+### Doctor Entity
+
+```text
+id
+name
+specialization
+qualification
+experience
+phone
+email
+consultationFee
+availability
+hospitalName
+```
+
+---
+
+# 4. Appointment Service
+
+## Base URL
+
+```
+/api/appointments
+```
+
+---
+
+## Book Appointment
+
+```
+POST /api/appointments
+```
+
+---
+
+## Get All Appointments
+
+```
+GET /api/appointments
+```
+
+---
+
+## Get Appointment By ID
+
+```
+GET /api/appointments/{id}
+```
+
+---
+
+## Update Appointment
+
+```
+PUT /api/appointments/{id}
+```
+
+---
+
+## Cancel Appointment
+
+```
+DELETE /api/appointments/{id}
+```
+
+---
+
+## Get Patient Appointments
+
+```
+GET /api/appointments/patient/{patientId}
+```
+
+---
+
+## Get Doctor Appointments
+
+```
+GET /api/appointments/doctor/{doctorId}
+```
+
+---
+
+### Appointment Entity
+
+```text
+id
+patientId
+doctorId
+appointmentDate
+appointmentTime
+status
+reason
+```
+
+---
+
+# 5. Prescription Service
+
+## Base URL
+
+```
+/api/prescriptions
+```
+
+---
+
+## Create Prescription
+
+```
+POST /api/prescriptions
+```
+
+---
+
+## Get All Prescriptions
+
+```
+GET /api/prescriptions
+```
+
+---
+
+## Get Prescription By ID
+
+```
+GET /api/prescriptions/{id}
+```
+
+---
+
+## Update Prescription
+
+```
+PUT /api/prescriptions/{id}
+```
+
+---
+
+## Delete Prescription
+
+```
+DELETE /api/prescriptions/{id}
+```
+
+---
+
+### Prescription Entity
+
+```text
+id
+appointmentId
+patientId
+doctorId
+diagnosis
+notes
+createdDate
+```
+
+---
+
+# 6. Medicine Service
+
+## Base URL
+
+```
+/api/medicines
+```
+
+---
+
+## Add Medicine
+
+```
+POST /api/medicines
+```
+
+---
+
+## Get All Medicines
+
+```
+GET /api/medicines
+```
+
+---
+
+## Get Medicine By ID
+
+```
+GET /api/medicines/{id}
+```
+
+---
+
+## Update Medicine
+
+```
+PUT /api/medicines/{id}
+```
+
+---
+
+## Delete Medicine
+
+```
+DELETE /api/medicines/{id}
+```
+
+---
+
+### Medicine Entity
+
+```text
+id
+medicineName
+manufacturer
+price
+stock
+expiryDate
+dosage
+```
+
+---
+
+# 7. Billing Service
+
+## Base URL
+
+```
+/api/bills
+```
+
+---
+
+## Generate Bill
+
+```
+POST /api/bills
+```
+
+---
+
+## Get All Bills
+
+```
+GET /api/bills
+```
+
+---
+
+## Get Bill By ID
+
+```
+GET /api/bills/{id}
+```
+
+---
+
+## Update Bill
+
+```
+PUT /api/bills/{id}
+```
+
+---
+
+## Delete Bill
+
+```
+DELETE /api/bills/{id}
+```
+
+---
+
+### Bill Entity
+
+```text
+id
+appointmentId
+consultationFee
+medicineCharges
+labCharges
+totalAmount
+billDate
+status
+```
+
+---
+
+# 8. Payment Service
+
+## Base URL
+
+```
+/api/payments
+```
+
+---
+
+## Make Payment
+
+```
+POST /api/payments
+```
+
+---
+
+## Get All Payments
+
+```
+GET /api/payments
+```
+
+---
+
+## Get Payment By ID
+
+```
+GET /api/payments/{id}
+```
+
+---
+
+## Update Payment Status
+
+```
+PUT /api/payments/{id}
+```
+
+---
+
+## Delete Payment
+
+```
+DELETE /api/payments/{id}
+```
+
+---
+
+### Payment Entity
+
+```text
+id
+billId
+amount
+paymentMode
+paymentDate
+transactionId
+paymentStatus
+```
+
+---
+
+# Microservices Architecture
+
+```
+Client (Angular)
+
+        │
+        ▼
+API Gateway
+
+        │
+──────────────────────────────────────────────────────
+
+User Service
+
+Patient Service
+
+Doctor Service
+
+Appointment Service
+
+Prescription Service
+
+Medicine Service
+
+Billing Service
+
+Payment Service
+
+──────────────────────────────────────────────────────
+
+MySQL Database (One Database per Microservice)
+```

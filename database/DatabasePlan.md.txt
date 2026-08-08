@@ -1,0 +1,14 @@
+# Database Tables
+
+1. users
+2. roles
+3. patients
+4. doctors
+5. appointments
+6. prescriptions
+7. medicines
+8. pharmacy_inventory
+9. lab_reports
+10. bills
+11. payments
+12. notifications

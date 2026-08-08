@@ -1,0 +1,75 @@
+                    USER
+             +----------------+
+             | user_id (PK)   |
+             | name           |
+             | email          |
+             | password       |
+             | role           |
+             +----------------+
+                    |
+                    | 1
+                    |
+                    | N
+             +----------------+
+             |    PATIENT     |
+             +----------------+
+             | patient_id(PK) |
+             | user_id (FK)   |
+             | age            |
+             | gender         |
+             | phone          |
+             | address        |
+             +----------------+
+                    |
+                    | 1
+                    |
+                    | N
+             +-------------------+
+             |   APPOINTMENT      |
+             +-------------------+
+             | appointment_id(PK)|
+             | patient_id (FK)   |
+             | doctor_id (FK)    |
+             | date              |
+             | time              |
+             | status            |
+             +-------------------+
+               /               \
+              /                 \
+             N                   1
+            /                     \
++----------------+         +----------------+
+|    DOCTOR      |         |      BILL      |
++----------------+         +----------------+
+| doctor_id(PK)  |         | bill_id (PK)   |
+| name           |         | appointment_id |
+| specialization |         | amount         |
+| phone          |         | bill_date      |
++----------------+         +----------------+
+       |                           |
+       |1                          |1
+       |                           |1
+       |N                          |
++------------------+      +------------------+
+|  PRESCRIPTION    |      |    PAYMENT       |
++------------------+      +------------------+
+| prescription_id  |      | payment_id (PK)  |
+| doctor_id (FK)   |      | bill_id (FK)     |
+| patient_id (FK)  |      | amount           |
+| medicine_id (FK) |      | payment_mode     |
+| dosage           |      | payment_date     |
++------------------+      | status           |
+                          +------------------+
+        |
+        | N
+        |
+        | 1
++----------------------+
+|      MEDICINE        |
++----------------------+
+| medicine_id (PK)     |
+| medicine_name        |
+| manufacturer         |
+| price                |
+| stock_quantity       |
++----------------------+

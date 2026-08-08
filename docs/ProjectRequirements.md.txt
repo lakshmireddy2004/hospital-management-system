@@ -1,0 +1,62 @@
+# Hospital Management System
+
+---
+
+# Project Overview
+
+---
+
+# User Roles
+
+- Admin
+- Receptionist
+- Doctor
+- Patient
+- Pharmacist
+- Lab Technician
+
+---
+
+# Features
+
+---
+
+# Technology Stack
+
+## Backend
+
+## Frontend
+
+## Database
+
+## Microservices
+
+---
+
+# Workflow
+
+Patient Registration
+
+↓
+
+Appointment Booking
+
+↓
+
+Doctor Consultation
+
+↓
+
+Laboratory Test
+
+↓
+
+Billing
+
+↓
+
+Payment
+
+↓
+
+Notification

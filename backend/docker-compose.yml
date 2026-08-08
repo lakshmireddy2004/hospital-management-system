@@ -1,0 +1,112 @@
+services:
+
+  eureka-server:
+    image: hospital-eureka
+    container_name: hospital-eureka-container
+    hostname: hospital-eureka
+    ports:
+      - "8761:8761"
+    environment:
+      EUREKA_INSTANCE_HOSTNAME: hospital-eureka
+    networks:
+      - hospital-network
+
+  config-server:
+    image: hospital-config-server
+    container_name: hospital-config-container
+    ports:
+      - "8888:8888"
+    networks:
+      - hospital-network
+
+  auth-service:
+    image: hospital-auth-service
+    container_name: hospital-auth-container
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/hospital_auth_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://hospital-eureka-container:8761/eureka/
+      SPRING_CONFIG_IMPORT: optional:configserver:http://hospital-config-container:8888
+    depends_on:
+      - eureka-server
+      - config-server
+    networks:
+      - hospital-network
+
+  patient-service:
+    image: hospital-patient-service
+    container_name: hospital-patient-container
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/hospital_patient_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://hospital-eureka-container:8761/eureka/
+      SPRING_CONFIG_IMPORT: optional:configserver:http://hospital-config-container:8888
+    depends_on:
+      - eureka-server
+      - config-server
+    networks:
+      - hospital-network
+
+  doctor-service:
+    image: hospital-doctor-service
+    container_name: hospital-doctor-container
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/hospital_doctor_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://hospital-eureka-container:8761/eureka/
+      SPRING_CONFIG_IMPORT: optional:configserver:http://hospital-config-container:8888
+    depends_on:
+      - eureka-server
+      - config-server
+    networks:
+      - hospital-network
+
+  appointment-service:
+    image: hospital-appointment-service
+    container_name: hospital-appointment-container
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/hospital_appointment_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://hospital-eureka-container:8761/eureka/
+      SPRING_CONFIG_IMPORT: optional:configserver:http://hospital-config-container:8888
+    depends_on:
+      - eureka-server
+      - config-server
+      - patient-service
+      - doctor-service
+    networks:
+      - hospital-network
+
+  api-gateway:
+    image: hospital-api-gateway
+    container_name: hospital-gateway-container
+    ports:
+      - "8080:8080"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://hospital-eureka-container:8761/eureka/
+      SPRING_CONFIG_IMPORT: optional:configserver:http://hospital-config-container:8888
+    depends_on:
+      - eureka-server
+      - config-server
+      - auth-service
+      - patient-service
+      - doctor-service
+      - appointment-service
+    networks:
+      - hospital-network
+
+networks:
+  hospital-network:
+    name: hospital-network

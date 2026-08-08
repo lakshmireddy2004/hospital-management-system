@@ -1,0 +1,32 @@
+# Hospital Management System Architecture
+
+```
+                    Angular Frontend
+                           |
+                    API Gateway
+                           |
+    ------------------------------------------------
+    |        |        |        |        |           |
+ User   Patient   Doctor   Appointment Billing   Payment
+ Service Service   Service    Service    Service   Service
+    |                                              |
+    |----------------------------------------------|
+                           |
+                   Notification Service
+                           |
+                  Pharmacy Service
+                           |
+                  Laboratory Service
+                           |
+                     Report Service
+
+----------------------------------------------------
+
+Infrastructure
+
+- Eureka Server
+- Config Server
+- MySQL
+- Redis
+- RabbitMQ
+```
