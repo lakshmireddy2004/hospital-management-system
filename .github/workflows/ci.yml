@@ -9,19 +9,8 @@ on:
       - main
 
 jobs:
-  build-services:
+  build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        service:
-          - backend/discovery-server-Eureka
-          - backend/config server
-          - backend/auth-service
-          - backend/patient-service
-          - backend/doctor-service
-          - backend/appointment-service
-          - backend/api-gateway
 
     steps:
       - name: Checkout Repository
@@ -34,6 +23,30 @@ jobs:
           java-version: 21
           cache: maven
 
-      - name: Build ${{ matrix.service }}
-        working-directory: ${{ matrix.service }}
+      - name: Build Eureka Server
+        working-directory: backend/discovery-server-Eureka
+        run: mvn clean package -DskipTests
+
+      - name: Build Config Server
+        working-directory: backend/config server
+        run: mvn clean package -DskipTests
+
+      - name: Build Auth Service
+        working-directory: backend/auth-service
+        run: mvn clean package -DskipTests
+
+      - name: Build Patient Service
+        working-directory: backend/patient-service
+        run: mvn clean package -DskipTests
+
+      - name: Build Doctor Service
+        working-directory: backend/doctor-service
+        run: mvn clean package -DskipTests
+
+      - name: Build Appointment Service
+        working-directory: backend/appointment-service
+        run: mvn clean package -DskipTests
+
+      - name: Build API Gateway
+        working-directory: backend/api-gateway
         run: mvn clean package -DskipTests
