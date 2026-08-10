@@ -9,27 +9,6 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        include:
-          - folder: api-gateway
-            image: hospital-api-gateway
-
-          - folder: auth-service
-            image: hospital-auth-service
-
-          - folder: patient-service
-            image: hospital-patient-service
-
-          - folder: doctor-service
-            image: hospital-doctor-service
-
-          - folder: appointment-service
-            image: hospital-appointment-service
-
-          - folder: discovery-server-Eureka
-            image: hospital-discovery-server
-
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
@@ -41,9 +20,33 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Build Application
-        working-directory: backend/${{ matrix.folder }}
-        run: mvn clean package -DskipTests
+      - name: Build API Gateway
+        working-directory: backend/api-gateway
+        run: mvn -B -ntp clean package -DskipTests
+
+      - name: Build Auth Service
+        working-directory: backend/auth-service
+        run: mvn -B -ntp clean package -DskipTests
+
+      - name: Build Patient Service
+        working-directory: backend/patient-service
+        run: mvn -B -ntp clean package -DskipTests
+
+      - name: Build Doctor Service
+        working-directory: backend/doctor-service
+        run: mvn -B -ntp clean package -DskipTests
+
+      - name: Build Appointment Service
+        working-directory: backend/appointment-service
+        run: mvn -B -ntp clean package -DskipTests
+
+      - name: Build Eureka Server
+        working-directory: backend/discovery-server-Eureka
+        run: mvn -B -ntp clean package -DskipTests
+
+      - name: Build Config Server
+        working-directory: backend/config server
+        run: mvn -B -ntp clean package -DskipTests
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -54,11 +57,51 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker Image
-        working-directory: backend/${{ matrix.folder }}
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest .
+      - name: Build API Gateway Docker Image
+        working-directory: backend/api-gateway
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/hospital-api-gateway:latest .
 
-      - name: Push Docker Image
-        run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest
+      - name: Push API Gateway Docker Image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/hospital-api-gateway:latest
+
+      - name: Build Auth Docker Image
+        working-directory: backend/auth-service
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/hospital-auth-service:latest .
+
+      - name: Push Auth Docker Image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/hospital-auth-service:latest
+
+      - name: Build Patient Docker Image
+        working-directory: backend/patient-service
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/hospital-patient-service:latest .
+
+      - name: Push Patient Docker Image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/hospital-patient-service:latest
+
+      - name: Build Doctor Docker Image
+        working-directory: backend/doctor-service
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/hospital-doctor-service:latest .
+
+      - name: Push Doctor Docker Image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/hospital-doctor-service:latest
+
+      - name: Build Appointment Docker Image
+        working-directory: backend/appointment-service
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/hospital-appointment-service:latest .
+
+      - name: Push Appointment Docker Image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/hospital-appointment-service:latest
+
+      - name: Build Eureka Docker Image
+        working-directory: backend/discovery-server-Eureka
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/hospital-discovery-server:latest .
+
+      - name: Push Eureka Docker Image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/hospital-discovery-server:latest
+
+      - name: Build Config Server Docker Image
+        working-directory: backend/config server
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/hospital-config-server:latest .
+
+      - name: Push Config Server Docker Image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/hospital-config-server:latest
